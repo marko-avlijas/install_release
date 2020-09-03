@@ -1,5 +1,5 @@
 class Asset
-  attr_reader :raw_data, :name, :download_url, :architecture, :os, :distribution
+  attr_reader :raw_data, :name, :download_url
 
   class << self
     def from_json(json)
@@ -23,6 +23,29 @@ class Asset
                         :i686
                       when /(x86_64|amd64)/
                         :x86_64
+                      end
+  end
+
+  def os
+    @os ||= case name
+            when /windows/
+              :windows
+            when /(apple|darwin)/
+              :darwin
+            when /linux/
+              :linux
+            when /\.deb$/
+              :linux
+            end
+  end
+
+  def distribution
+    return nil unless os == :linux
+
+    @distribution ||= if name =~ /\.deb$/
+                        :debian
+                      else
+                        :unknown
                       end
   end
 end
