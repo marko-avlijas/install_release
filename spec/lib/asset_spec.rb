@@ -2,14 +2,46 @@ require 'asset'
 
 describe Asset do
 
+  let(:json) do
+    { "url"=>"https://api.github.com/repos/sharkdp/fd/releases/assets/21037481", "id"=>21037481, "node_id"=>"MDEyOlJlbGVhc2VBc3NldDIxMDM3NDgx", "name"=>"fd-musl_8.1.1_amd64.deb", "label"=>"", "uploader"=>{"login"=>"sharkdp", "id"=>4209276, "node_id"=>"MDQ6VXNlcjQyMDkyNzY=", "avatar_url"=>"https://avatars2.githubusercontent.com/u/4209276?v=4", "gravatar_id"=>"", "url"=>"https://api.github.com/users/sharkdp", "html_url"=>"https://github.com/sharkdp", "followers_url"=>"https://api.github.com/users/sharkdp/followers", "following_url"=>"https://api.github.com/users/sharkdp/following{/other_user}", "gists_url"=>"https://api.github.com/users/sharkdp/gists{/gist_id}", "starred_url"=>"https://api.github.com/users/sharkdp/starred{/owner}{/repo}", "subscriptions_url"=>"https://api.github.com/users/sharkdp/subscriptions", "organizations_url"=>"https://api.github.com/users/sharkdp/orgs", "repos_url"=>"https://api.github.com/users/sharkdp/repos", "events_url"=>"https://api.github.com/users/sharkdp/events{/privacy}", "received_events_url"=>"https://api.github.com/users/sharkdp/received_events", "type"=>"User", "site_admin"=>false}, "content_type"=>"application/x-debian-package", "state"=>"uploaded", "size"=>754700, "download_count"=>1706, "created_at"=>"2020-05-25T14:12:56Z", "updated_at"=>"2020-05-25T14:12:56Z", "browser_download_url"=>"https://github.com/sharkdp/fd/releases/download/v8.1.1/fd-musl_8.1.1_amd64.deb"}
+  end
+
   describe "from_json(json)" do
     it "saves json as raw_data" do
-      json = { "url"=>"https://api.github.com/repos/sharkdp/fd/releases/assets/21037481", "id"=>21037481, "node_id"=>"MDEyOlJlbGVhc2VBc3NldDIxMDM3NDgx", "name"=>"fd-musl_8.1.1_amd64.deb", "label"=>"", "uploader"=>{"login"=>"sharkdp", "id"=>4209276, "node_id"=>"MDQ6VXNlcjQyMDkyNzY=", "avatar_url"=>"https://avatars2.githubusercontent.com/u/4209276?v=4", "gravatar_id"=>"", "url"=>"https://api.github.com/users/sharkdp", "html_url"=>"https://github.com/sharkdp", "followers_url"=>"https://api.github.com/users/sharkdp/followers", "following_url"=>"https://api.github.com/users/sharkdp/following{/other_user}", "gists_url"=>"https://api.github.com/users/sharkdp/gists{/gist_id}", "starred_url"=>"https://api.github.com/users/sharkdp/starred{/owner}{/repo}", "subscriptions_url"=>"https://api.github.com/users/sharkdp/subscriptions", "organizations_url"=>"https://api.github.com/users/sharkdp/orgs", "repos_url"=>"https://api.github.com/users/sharkdp/repos", "events_url"=>"https://api.github.com/users/sharkdp/events{/privacy}", "received_events_url"=>"https://api.github.com/users/sharkdp/received_events", "type"=>"User", "site_admin"=>false}, "content_type"=>"application/x-debian-package", "state"=>"uploaded", "size"=>754700, "download_count"=>1706, "created_at"=>"2020-05-25T14:12:56Z", "updated_at"=>"2020-05-25T14:12:56Z", "browser_download_url"=>"https://github.com/sharkdp/fd/releases/download/v8.1.1/fd-musl_8.1.1_amd64.deb"}
       asset = Asset.from_json(json)
 
       expect(asset.raw_data).to eq(json)
     end
 
+  end
+
+  describe "#name" do
+    it "can be set from raw_data or directly in initializer" do
+      # from name
+      expect(Asset.new(name: "name").name).to eq("name")
+
+      # from raw_data
+      expect(Asset.new(raw_data: json).name).to eq("fd-musl_8.1.1_amd64.deb")
+
+      # both
+      expect(Asset.new(raw_data: json, name: "name").name).to eq("name")
+    end
+  end
+
+  describe "#download_url" do
+    it "can be set from raw_data or directly in initializer" do
+      # from name
+      expect(Asset.new(download_url: "download_url").download_url).to eq("download_url")
+
+      # from raw_data
+      expect(Asset.new(raw_data: json).download_url).to eq("https://github.com/sharkdp/fd/releases/download/v8.1.1/fd-musl_8.1.1_amd64.deb")
+
+      # both
+      expect(Asset.new(raw_data: json,download_url: "download_url").download_url).to eq("download_url")
+    end
+  end
+
+  describe "#download_url" do
   end
 
   describe "#architecture" do

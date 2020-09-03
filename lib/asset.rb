@@ -1,5 +1,7 @@
+# Represents a single file (.tar.gz, .zip, .deb...) which is a release for
+# certain architecture, os and distribution.
 class Asset
-  attr_reader :raw_data, :name, :download_url
+  attr_reader :raw_data
 
   class << self
     def from_json(json)
@@ -7,10 +9,19 @@ class Asset
     end
   end
 
+  # either set raw_data (as parsed json) or name and download_url
   def initialize(raw_data: nil, name: nil, download_url: nil)
     @raw_data = raw_data
     @name = name
     @download_url = download_url
+  end
+
+  def name
+    @name ||= raw_data["name"]
+  end
+
+  def download_url
+    @download_url ||= raw_data["browser_download_url"]
   end
 
   def architecture
