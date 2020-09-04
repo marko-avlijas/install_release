@@ -3,12 +3,6 @@
 class Asset
   attr_reader :raw_data
 
-  class << self
-    def from_json(json)
-      Asset.new(raw_data: json)
-    end
-  end
-
   # either set raw_data (as parsed json) or name and download_url
   def initialize(raw_data: nil, name: nil, download_url: nil)
     @raw_data = raw_data
