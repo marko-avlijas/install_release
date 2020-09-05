@@ -17,18 +17,13 @@ class Release
     response = HTTParty.get github_url
     raise NotFoundError if response.code == 404
 
-    json = JSON.parse(response.body)
-    @raw_data = json
-    @assets = json["assets"].map { |asset_json| Asset.new(raw_data: asset_json) }
+    @raw_data = JSON.parse(response.body)
+    @assets = @raw_data["assets"].map { |asset_json| Asset.new(raw_data: asset_json) }
   end
 
   def github_url
     base_url = "https://api.github.com/repos/#{repo}/releases"
-    if tag.to_s == "latest"
-      suffix = "latest"
-    else
-      suffix = "tags/#{tag}"
-    end
+    suffix = (tag.to_s == "latest") ? "latest" : "tags/#{tag}"
 
     "#{base_url}/#{suffix}"
   end
