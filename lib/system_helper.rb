@@ -62,7 +62,7 @@ class SystemHelper
     end
 
     # detects system architecture
-    # returns :x86_64, :i686, arm, or aarch64
+    # returns :x86_64, :i686, arm, or :unknown_cpu
     # there are more details to arm processors but I don't think this will be used on arm
     #
     # based on https://github.com/rossmacarthur/install/blob/master/crate.sh

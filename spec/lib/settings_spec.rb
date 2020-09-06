@@ -11,17 +11,19 @@ describe Settings do
     expect(Settings.instance.preferred_download_tool).to eq(:curl)
     expect(Settings.instance.download_dir).to eq("$HOME/src/releases/")
     expect(Settings.instance.supported_oses).to match_array([:linux])
+    expect(Settings.instance.supported_package_managers).to match_array(["dpkg"])
 
-    Settings.instance.clear_settings
+    Settings.instance.clear
   end
 
-  it "#clear_settings" do
+  it "#clear" do
     Settings.instance.set_defaults
-    Settings.instance.clear_settings
+    Settings.instance.clear
 
     expect(Settings.instance.preferred_download_tool).to be nil
     expect(Settings.instance.download_dir).to be nil
     expect(Settings.instance.supported_oses).to be nil
+    expect(Settings.instance.supported_package_managers).to be nil
   end
 end
 
