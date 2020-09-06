@@ -1,9 +1,7 @@
-class Helper
+class SystemHelper
   class << self
-    def download_file(url:, to:)
-      download_tool = Settings.instance.download_tool.to_s
-
-      case download_tool
+    def download_file(url:, to:, download_tool:)
+      case download_tool.to_s
       when 'curl'
         system %{curl -L --output "#{to}" "#{url}"}
       when 'wget'
