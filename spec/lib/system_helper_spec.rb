@@ -45,7 +45,7 @@ describe SystemHelper do
     context "command returns 0 (success)" do
       it "returns captured stdout" do
         output = SystemHelper.capture_stdout_and_raise_on_error("which", "bash")
-        expect(output).to match /bash\n$/
+        expect(output).to match(/bash\n$/)
       end
     end
 
