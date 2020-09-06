@@ -49,7 +49,18 @@ describe Release do
         "ripgrep-12.1.1-x86_64-pc-windows-gnu.zip",
         "ripgrep-12.1.1-x86_64-pc-windows-msvc.zip",
         "ripgrep-12.1.1-x86_64-unknown-linux-musl.tar.gz",
-        "ripgrep_12.1.1_amd64.deb",
+        "ripgrep_12.1.1_amd64.deb"
+      )
+
+      asset_download_urls = release.assets.map { |asset| asset.download_url }
+      expect(asset_download_urls).to contain_exactly(
+        "https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep-12.1.1-arm-unknown-linux-gnueabihf.tar.gz",
+        "https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep-12.1.1-i686-pc-windows-msvc.zip",
+        "https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep-12.1.1-x86_64-apple-darwin.tar.gz",
+        "https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep-12.1.1-x86_64-pc-windows-gnu.zip",
+        "https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep-12.1.1-x86_64-pc-windows-msvc.zip",
+        "https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep-12.1.1-x86_64-unknown-linux-musl.tar.gz",
+        "https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb"
       )
     end
 
