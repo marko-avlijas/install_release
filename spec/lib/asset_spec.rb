@@ -32,63 +32,58 @@ describe Asset do
     end
   end
 
-  describe "#architecture" do
+  describe "#cpu_type" do
     let(:arm_asset)    { Asset.new(name: "fd-musl_8.1.1_armhf.deb") }
     let(:i386_asset)   { Asset.new(name: "fd_8.1.1_i386.deb") }
     let(:i686_asset)   { Asset.new(name: "fd-v8.1.1-i686-unknown-linux-gnu.tar.gz") }
     let(:amd64_asset)  { Asset.new(name: "fd_8.1.1_amd64.deb") }
     let(:x86_64_asset) { Asset.new(name: "fd-v8.1.1-x86_64-unknown-linux-musl.tar.gz") }
+    let(:unknown_cpu_asset) { Asset.new(name: "fd-v8.1.1-unknown-linux-musl.tar.gz") }
 
-    it "detects i386 architecture" do
-      expect(i686_asset.architecture).not_to eq(:i386)
-
-      expect(i386_asset.architecture).to eq(:i386)
+    it "detects i686 cpu_type" do
+      expect(i386_asset.cpu_type).to eq(:i686)
+      expect(i686_asset.cpu_type).to eq(:i686)
     end
 
-    it "detects i686 architecture" do
-      expect(amd64_asset.architecture).not_to eq(:i686)
-
-      expect(i686_asset.architecture).to eq(:i686)
+    it "detects x86_64 cpu_type" do
+      expect(amd64_asset.cpu_type).to eq(:x86_64)
+      expect(x86_64_asset.cpu_type).to eq(:x86_64)
     end
 
-    it "detects x86_64 architecture" do
-      expect(i686_asset.architecture).not_to eq(:x86_64)
-
-      expect(amd64_asset.architecture).to eq(:x86_64)
-      expect(x86_64_asset.architecture).to eq(:x86_64)
+    it "detects arm cpu_type" do
+      expect(arm_asset.cpu_type).to eq(:arm)
     end
 
-    it "detects arm architecture" do
-      expect(amd64_asset.architecture).not_to eq(:arm)
-
-      expect(arm_asset.architecture).to eq(:arm)
+    it "otherwise returns :unknown_cpu" do
+      expect(unknown_cpu_asset.cpu_type).to eq(:unknown_cpu)
     end
 
-    it "detects architecture for all assets in 'sharkdp/fd' repo" do
-      names = [
-        "fd-musl_8.1.1_amd64.deb",
-        "fd-musl_8.1.1_armhf.deb",
-        "fd-musl_8.1.1_i386.deb",
-        "fd-v8.1.1-arm-unknown-linux-gnueabihf.tar.gz",
-        "fd-v8.1.1-arm-unknown-linux-musleabihf.tar.gz",
-        "fd-v8.1.1-i686-pc-windows-gnu.zip",
-        "fd-v8.1.1-i686-pc-windows-msvc.zip",
-        "fd-v8.1.1-i686-unknown-linux-gnu.tar.gz",
-        "fd-v8.1.1-i686-unknown-linux-musl.tar.gz",
-        "fd-v8.1.1-x86_64-apple-darwin.tar.gz",
-        "fd-v8.1.1-x86_64-pc-windows-gnu.zip",
-        "fd-v8.1.1-x86_64-pc-windows-msvc.zip",
-        "fd-v8.1.1-x86_64-unknown-linux-gnu.tar.gz",
-        "fd-v8.1.1-x86_64-unknown-linux-musl.tar.gz",
-        "fd_8.1.1_amd64.deb",
-        "fd_8.1.1_armhf.deb",
-        "fd_8.1.1_i386.deb"
-      ]
-      assets = names.map { |name| Asset.new(name: name) }
+    it "detects cpu_type for all assets in 'sharkdp/fd' repo" do
+      names_cpu_types = {
+        "fd-musl_8.1.1_amd64.deb" => :x86_64,
+        "fd-musl_8.1.1_armhf.deb" => :arm,
+        "fd-musl_8.1.1_i386.deb" => :i686,
+        "fd-v8.1.1-arm-unknown-linux-gnueabihf.tar.gz" => :arm,
+        "fd-v8.1.1-arm-unknown-linux-musleabihf.tar.gz" => :arm,
+        "fd-v8.1.1-i686-pc-windows-gnu.zip" => :i686,
+        "fd-v8.1.1-i686-pc-windows-msvc.zip" => :i686,
+        "fd-v8.1.1-i686-unknown-linux-gnu.tar.gz" => :i686,
+        "fd-v8.1.1-i686-unknown-linux-musl.tar.gz" => :i686,
+        "fd-v8.1.1-x86_64-apple-darwin.tar.gz" => :x86_64,
+        "fd-v8.1.1-x86_64-pc-windows-gnu.zip" => :x86_64,
+        "fd-v8.1.1-x86_64-pc-windows-msvc.zip" => :x86_64,
+        "fd-v8.1.1-x86_64-unknown-linux-gnu.tar.gz" => :x86_64,
+        "fd-v8.1.1-x86_64-unknown-linux-musl.tar.gz" => :x86_64,
+        "fd_8.1.1_amd64.deb" => :x86_64,
+        "fd_8.1.1_armhf.deb" => :arm,
+        "fd_8.1.1_i386.deb" => :i686
+      }
 
       aggregate_failures do
-        assets.each do |asset|
-          expect(asset.architecture).not_to be_nil, "couldn't detect architecture for: #{asset.name}"
+        names_cpu_types.each do |name, cpu_type| 
+          asset = Asset.new(name: name)
+          actual_cpu = asset.cpu_type
+          expect(actual_cpu).to eq(cpu_type), "Expected #{actual_cpu} to be #{cpu_type} for #{name}"
         end
       end
     end

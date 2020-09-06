@@ -1,5 +1,5 @@
 # Represents a single file (.tar.gz, .zip, .deb...) which is a release for
-# certain architecture, os and distribution.
+# certain cpu_type, os and distribution.
 class Asset
   attr_reader :raw_data
 
@@ -18,16 +18,16 @@ class Asset
     @download_url ||= raw_data["browser_download_url"]
   end
 
-  def architecture
-    @architecture ||= case name
+  def cpu_type
+    @cpu_type ||= case name
                       when /arm/
                         :arm
-                      when /i386/
-                        :i386
-                      when /i686/
+                      when /i386/, /i686/
                         :i686
                       when /(x86_64|amd64)/
                         :x86_64
+                      else
+                        :unknown_cpu
                       end
   end
 

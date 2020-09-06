@@ -60,5 +60,25 @@ class SystemHelper
         :unknown_os
       end
     end
+
+    # detects system architecture
+    # returns :x86_64, :i686, arm, or aarch64
+    # there are more details to arm processors but I don't think this will be used on arm
+    #
+    # based on https://github.com/rossmacarthur/install/blob/master/crate.sh
+    def detect_cpu_type
+      cpu_type = capture_stdout_and_raise_on_error("uname", "-m").strip
+
+      case cpu_type
+      when /x86_64/, /x86-64/, /x64/, /amd64/
+        :x86_64
+      when /i386/, /i486/, /i686/, /i786/, /x86/
+        :i686
+      when /xscale/, /arm/, /aarch64/
+        :arm
+      else
+        :unknown_cpu
+      end
+    end
   end
 end
