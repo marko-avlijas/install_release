@@ -94,42 +94,59 @@ describe Asset do
     end
   end
 
-  describe "#os and #distribution" do
-    let(:debian_asset) { Asset.new(name: "fd-musl_8.1.1_amd64.deb") }
+  describe "#os" do
+    let(:deb_asset) { Asset.new(name: "fd-musl_8.1.1_amd64.deb") }
     let(:unknown_linux_gnu_asset) { Asset.new(name: "fd-v8.1.1-i686-unknown-linux-gnu.tar.gz") }
     let(:unknown_linux_musl_asset) { Asset.new(name: "fd-v8.1.1-i686-unknown-linux-musl.tar.gz") }
     let(:windows_asset) { Asset.new(name: "fd-v8.1.1-i686-pc-windows-gnu.zip") }
     let(:apple_asset) { Asset.new(name: "fd-v8.1.1-x86_64-apple-darwin.tar.gz") }
 
     it "detects windows" do
-      expect(apple_asset.os).not_to eq(:windows)
-
       expect(windows_asset.os).to eq(:windows)
-      expect(windows_asset.distribution).to be_nil
     end
 
     it "detects darwin" do
-      expect(unknown_linux_musl_asset.os).not_to eq(:darwin)
-
       expect(apple_asset.os).to eq(:darwin)
-      expect(apple_asset.distribution).to be_nil
     end
 
     it "detects unknown linux" do
-      expect(windows_asset.os).not_to eq(:linux)
-
       expect(unknown_linux_gnu_asset.os).to eq(:linux)
-      expect(unknown_linux_gnu_asset.distribution).to eq(:unknown)
     end
 
-    it "detects debian based distribution" do
-      expect(apple_asset.os).not_to eq(:linux)
+    it "detects .deb as linux" do
+      expect(deb_asset.os).to eq(:linux)
+    end
+  end
 
-      expect(unknown_linux_musl_asset.os).to eq(:linux)
-      expect(unknown_linux_musl_asset.distribution).not_to eq(:debian)
+  describe "#package_manager" do
+    let(:deb_asset) { Asset.new(name: "fd-musl_8.1.1_amd64.deb") }
+    let(:unknown_linux_gnu_asset) { Asset.new(name: "fd-v8.1.1-i686-unknown-linux-gnu.tar.gz") }
+    let(:unknown_linux_musl_asset) { Asset.new(name: "fd-v8.1.1-i686-unknown-linux-musl.tar.gz") }
+    let(:windows_asset) { Asset.new(name: "fd-v8.1.1-i686-pc-windows-gnu.zip") }
+    let(:apple_asset) { Asset.new(name: "fd-v8.1.1-x86_64-apple-darwin.tar.gz") }
 
-      expect(debian_asset.os).to eq(:linux)
-      expect(debian_asset.distribution).to eq(:debian)
+    context "windows asset" do
+      it "package manager is nil" do
+      expect(windows_asset.package_manager).to be nil
+      end
+    end
+
+    context "apple_asset asset" do
+      it "package_manager is nil" do
+        expect(apple_asset.package_manager).to be nil
+      end
+    end
+
+    context "unknown linux asset" do
+      it "package_manager is nil" do
+        expect(unknown_linux_gnu_asset.package_manager).to be nil
+      end
+    end
+
+    context ".deb asset" do
+      it "package_manager is 'dpkg'" do
+        expect(deb_asset.package_manager).to eq('dpkg')
+      end
     end
   end
 end

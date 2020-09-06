@@ -44,14 +44,13 @@ class Asset
             end
   end
 
-  def distribution
-    return nil unless os == :linux
-
-    @distribution ||= if name =~ /\.deb$/
-                        :debian
-                      else
-                        :unknown
-                      end
+  def package_manager
+    case name
+    when /\.deb$/
+      'dpkg'
+    else
+      nil
+    end
   end
 end
 
