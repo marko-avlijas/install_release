@@ -1,6 +1,6 @@
 class Installer
   attr_reader :repo, :tag, :release, :asset
-  attr_reader :os, :cpu_type, :download_tool, :package_managers
+  attr_reader :os, :cpu_type, :download_tool, :package_managers, :asset_selector
 
   def initialize(repo:, tag:)
     @repo = repo
@@ -25,6 +25,7 @@ class Installer
     detect_package_managers
 
     select_asset
+    abort unless asset_selector.success?
     download_asset
 
     status_code = install_asset
@@ -58,6 +59,9 @@ class Installer
   end
 
   def select_asset
+    @asset_selector = AssetSelector.new(cpu: cpu_type, os: os, package_managers: package_managers, release: release)
+    asset_selector.call
+    puts asset_selector.report
   end
 
   def download_asset
