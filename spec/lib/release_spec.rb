@@ -88,11 +88,11 @@ describe Release do
         all_assets = amd64_asset, x86_64_asset, i686_asset, arm_asset, unknown_cpu_asset
         subject.assets.push(*all_assets)
 
-        expect(subject.select_assets(cpu_type: :any)).to contain_exactly(*all_assets)
-        expect(subject.select_assets(cpu_type: :arm)).to contain_exactly(arm_asset)
-        expect(subject.select_assets(cpu_type: :i686)).to contain_exactly(i686_asset)
-        expect(subject.select_assets(cpu_type: :x86_64)).to contain_exactly(amd64_asset, x86_64_asset)
-        expect(subject.select_assets(cpu_type: :unknown_cpu)).to contain_exactly(unknown_cpu_asset)
+        expect(subject.select_assets(cpu: :any)).to contain_exactly(*all_assets)
+        expect(subject.select_assets(cpu: :arm)).to contain_exactly(arm_asset)
+        expect(subject.select_assets(cpu: :i686)).to contain_exactly(i686_asset)
+        expect(subject.select_assets(cpu: :x86_64)).to contain_exactly(amd64_asset, x86_64_asset)
+        expect(subject.select_assets(cpu: :unknown_cpu)).to contain_exactly(unknown_cpu_asset)
 
         # it does not change assets collection
         expect(subject.assets).to contain_exactly(*all_assets)

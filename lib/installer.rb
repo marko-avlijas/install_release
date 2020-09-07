@@ -16,7 +16,7 @@ class Installer
     detect_os
     abort "OS #{os.inspect} is not supported" unless Settings.instance.supported_oses.include?(@os)
 
-    detect_architecture
+    detect_cpu_type
     abort "Couldn't detect cpu architecture" if cpu_type.nil?
 
     detect_system_download_tool
