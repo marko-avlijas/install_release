@@ -41,6 +41,8 @@ class Asset
               :linux
             when /\.deb$/
               :linux
+            else
+              :unknown_os
             end
   end
 
@@ -49,7 +51,7 @@ class Asset
     when /\.deb$/
       'dpkg'
     else
-      nil
+      :none
     end
   end
 end

@@ -99,6 +99,7 @@ describe Asset do
     let(:unknown_linux_musl_asset) { Asset.new(name: "fd-v8.1.1-i686-unknown-linux-musl.tar.gz") }
     let(:windows_asset) { Asset.new(name: "fd-v8.1.1-i686-pc-windows-gnu.zip") }
     let(:apple_asset) { Asset.new(name: "fd-v8.1.1-x86_64-apple-darwin.tar.gz") }
+    let(:unknown_os_asset) { Asset.new(name: "fd-v8.1.1-x86_64.tar.gz") }
 
     it "detects windows" do
       expect(windows_asset.os).to eq(:windows)
@@ -115,6 +116,10 @@ describe Asset do
     it "detects .deb as linux" do
       expect(deb_asset.os).to eq(:linux)
     end
+
+    it "else it's :unknown_os" do
+      expect(unknown_os_asset.os).to eq(:unknown_os)
+    end
   end
 
   describe "#package_manager" do
@@ -125,20 +130,20 @@ describe Asset do
     let(:apple_asset) { Asset.new(name: "fd-v8.1.1-x86_64-apple-darwin.tar.gz") }
 
     context "windows asset" do
-      it "package manager is nil" do
-      expect(windows_asset.package_manager).to be nil
+      it "package manager is :none" do
+      expect(windows_asset.package_manager).to eq :none
       end
     end
 
     context "apple_asset asset" do
-      it "package_manager is nil" do
-        expect(apple_asset.package_manager).to be nil
+      it "package_manager is :none" do
+        expect(apple_asset.package_manager).to eq :none
       end
     end
 
     context "unknown linux asset" do
-      it "package_manager is nil" do
-        expect(unknown_linux_gnu_asset.package_manager).to be nil
+      it "package_manager is :none" do
+        expect(unknown_linux_gnu_asset.package_manager).to eq :none
       end
     end
 

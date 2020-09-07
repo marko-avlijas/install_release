@@ -75,4 +75,67 @@ describe Release do
       expect(release.raw_data["url"]).to start_with("https://api.github.com/repos/BurntSushi/ripgrep/releases/")
     end
   end
+
+  describe "#select_assets" do
+    context "selecting by cpu_type" do
+      let(:arm_asset)         { Asset.new(name: "bat-arm") }
+      let(:i686_asset)        { Asset.new(name: "bat-i686") }
+      let(:amd64_asset)       { Asset.new(name: "bat-amd64") }
+      let(:x86_64_asset)      { Asset.new(name: "bat-x86_64") }
+      let(:unknown_cpu_asset) { Asset.new(name: "bat-unknown") }
+
+      specify do
+        all_assets = amd64_asset, x86_64_asset, i686_asset, arm_asset, unknown_cpu_asset
+        subject.assets.push(*all_assets)
+
+        expect(subject.select_assets(cpu_type: :any)).to contain_exactly(*all_assets)
+        expect(subject.select_assets(cpu_type: :arm)).to contain_exactly(arm_asset)
+        expect(subject.select_assets(cpu_type: :i686)).to contain_exactly(i686_asset)
+        expect(subject.select_assets(cpu_type: :x86_64)).to contain_exactly(amd64_asset, x86_64_asset)
+        expect(subject.select_assets(cpu_type: :unknown_cpu)).to contain_exactly(unknown_cpu_asset)
+
+        # it does not change assets collection
+        expect(subject.assets).to contain_exactly(*all_assets)
+      end
+    end
+
+    context "selecting by os" do
+      let(:windows_asset)     { Asset.new(name: "bat-windows") }
+      let(:apple_asset)       { Asset.new(name: "bat-apple") }
+      let(:darwin_asset)      { Asset.new(name: "bat_darwin") }
+      let(:linux_asset)       { Asset.new(name: "bat_linux") }
+      let(:debian_asset)      { Asset.new(name: "bat.deb") }
+      let(:unknown_os_asset)  { Asset.new(name: "bat") }
+
+      specify do
+        all_assets = [windows_asset, apple_asset, darwin_asset,
+                      linux_asset, debian_asset, unknown_os_asset]
+        subject.assets.push(*all_assets)
+
+        expect(subject.select_assets(os: :any)).to contain_exactly(*all_assets)
+        expect(subject.select_assets(os: :windows)).to contain_exactly(windows_asset)
+        expect(subject.select_assets(os: :darwin)).to contain_exactly(apple_asset, darwin_asset)
+        expect(subject.select_assets(os: :linux)).to contain_exactly(linux_asset, debian_asset)
+        expect(subject.select_assets(os: :unknown_os)).to contain_exactly(unknown_os_asset)
+
+        # it does not change assets collection
+        expect(subject.assets).to contain_exactly(*all_assets)
+      end
+    end
+
+    context "selecting by package_managers" do
+      let(:linux_asset)       { Asset.new(name: "bat_linux.tar.gz") }
+      let(:debian_asset)      { Asset.new(name: "bat.deb") }
+
+      specify do
+        all_assets = [linux_asset, debian_asset]
+        subject.assets.push(*all_assets)
+
+        expect(subject.select_assets(package_managers: :any)).to contain_exactly(*all_assets)
+        expect(subject.select_assets(package_managers: [:none])).to contain_exactly(linux_asset)
+        expect(subject.select_assets(package_managers: ["dpkg"])).to contain_exactly(debian_asset)
+        expect(subject.select_assets(package_managers: ["dpkg", :none])).to contain_exactly(*all_assets)
+      end
+    end
+  end
 end
