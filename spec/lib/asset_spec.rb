@@ -33,11 +33,13 @@ describe Asset do
   end
 
   describe "#cpu_type" do
-    let(:arm_asset)    { Asset.new(name: "fd-musl_8.1.1_armhf.deb") }
-    let(:i386_asset)   { Asset.new(name: "fd_8.1.1_i386.deb") }
-    let(:i686_asset)   { Asset.new(name: "fd-v8.1.1-i686-unknown-linux-gnu.tar.gz") }
-    let(:amd64_asset)  { Asset.new(name: "fd_8.1.1_amd64.deb") }
-    let(:x86_64_asset) { Asset.new(name: "fd-v8.1.1-x86_64-unknown-linux-musl.tar.gz") }
+    let(:arm_asset)         { Asset.new(name: "fd-musl_8.1.1_armhf.deb") }
+    let(:i386_asset)        { Asset.new(name: "fd_8.1.1_i386.deb") }
+    let(:i686_asset)        { Asset.new(name: "fd-v8.1.1-i686-unknown-linux-gnu.tar.gz") }
+    let(:amd64_asset)       { Asset.new(name: "fd_8.1.1_amd64.deb") }
+    let(:x64_asset)         { Asset.new(name: "fd-v8.1.1-x64-unknown-linux-musl.tar.gz") }
+    let(:x86_64_asset)      { Asset.new(name: "fd-v8.1.1-x86_64-unknown-linux-musl.tar.gz") }
+    let(:x86_dash_64_asset) { Asset.new(name: "fd-v8.1.1-x86-64-unknown-linux-musl.tar.gz") }
     let(:unknown_cpu_asset) { Asset.new(name: "fd-v8.1.1-unknown-linux-musl.tar.gz") }
 
     it "detects i686 cpu_type" do
@@ -47,7 +49,9 @@ describe Asset do
 
     it "detects x86_64 cpu_type" do
       expect(amd64_asset.cpu_type).to eq(:x86_64)
+      expect(x64_asset.cpu_type).to eq(:x86_64)
       expect(x86_64_asset.cpu_type).to eq(:x86_64)
+      expect(x86_dash_64_asset.cpu_type).to eq(:x86_64)
     end
 
     it "detects arm cpu_type" do

@@ -24,7 +24,7 @@ class Asset
                         :arm
                       when /i386/, /i686/
                         :i686
-                      when /(x86_64|amd64)/
+                      when /(x86_64|x86-64|x64|amd64)/
                         :x86_64
                       else
                         :unknown_cpu
