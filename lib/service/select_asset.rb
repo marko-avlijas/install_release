@@ -1,3 +1,6 @@
+require 'release'
+require 'asset'
+
 # Chooses asset to install from list of assets in a release
 # based on user's package managers, os and cpu architecture.
 #
@@ -5,13 +8,20 @@
 #
 # release = Release.new repo: 'sharkdp/fd', tag: 'latest'
 # release.get_info
-# asset_selector = AssetSelector.new(cpu: :x86_64, os: :linux,
+# asset_selector = SelectAsset.new(cpu: :x86_64, os: :linux,
 #                                    package_managers: ["apt", "dpkg"], release: release)
 # asset_selector.call
 # puts asset_selector.suitable_assets => [asset1, asset 2]
 # puts asset_selector.selected_asset => [asset1]
 #
-class AssetSelector
+class SelectAsset
+  # extend Callable - doesn't work well with named params
+  class << self
+    def call(cpu:, os:, package_managers:, release:)
+      new(cpu: cpu, os: os, package_managers: package_managers, release: release).call
+    end
+  end
+
   attr_reader :cpu, :os, :package_managers, :release
   attr_reader :suitable_assets, :selection_strategy
   attr_reader :selection_made_at_step
@@ -49,38 +59,40 @@ class AssetSelector
       # 1. choose package manager version for user's cpu
       @suitable_assets = release.select_assets(cpu: cpu, os: os, package_managers: package_managers)
       @selection_made_at_step = 0
-      return unless @suitable_assets.empty?
+      return self unless @suitable_assets.empty?
 
       # 2. choose package manager version for unknown cpu
       @suitable_assets = release.select_assets(cpu: :unknown_cpu, os: os,
                                                package_managers: package_managers)
       @selection_made_at_step = 1
-      return unless @suitable_assets.empty?
+      return self unless @suitable_assets.empty?
     end
 
     # 3. choose normal version for user's os and cpu
     @suitable_assets = release.select_assets(cpu: cpu, os: os, package_managers: [:none])
     @selection_made_at_step = 2
-    return unless @suitable_assets.empty?
+    return self unless @suitable_assets.empty?
 
     # 4. choose normal version for user's os and :unknown cpu
     @suitable_assets = release.select_assets(cpu: :unknown_cpu, os: os, package_managers: [:none])
     @selection_made_at_step = 3
-    return unless @suitable_assets.empty?
+    return self unless @suitable_assets.empty?
 
     # 5. choose normal version for unknown os and user's cpu
     @suitable_assets = release.select_assets(cpu: cpu, os: :unknown_os, package_managers: [:none])
     @selection_made_at_step = 4
-    return unless @suitable_assets.empty?
+    return self unless @suitable_assets.empty?
 
     # 6. choose normal version with unknown cpu and unknown os
     @suitable_assets = release.select_assets(cpu: :unknown_cpu, os: :unknown_os,
                                              package_managers: [:none])
     @selection_made_at_step = 5
-    return unless @suitable_assets.empty?
+    return self unless @suitable_assets.empty?
 
     # 7. otherwise can't decide
     @selection_made_at_step = 6
+
+    self
   end
 
   # For steps 1-4 of SELECTION STRATEGY we know that for every suitable asset
