@@ -1,4 +1,5 @@
 require "httparty"
+require_relative "asset"
 
 # Represents a version of application. It contains one or more assets.
 # Each asset is specific to certain architecture and os and maybe even distribution.
@@ -15,7 +16,7 @@ class Release
 
   def get_info
     response = HTTParty.get github_url
-    raise NotFoundError if response.code == 404
+    raise NotFoundError, "Couldn't find #{github_url}" if response.code == 404
 
     @raw_data = JSON.parse(response.body)
     @assets = @raw_data["assets"].map { |asset_json| Asset.new(raw_data: asset_json) }

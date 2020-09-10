@@ -32,6 +32,13 @@ describe Asset do
     end
   end
 
+  describe "#to_s" do
+    it "returns name and download_url" do
+      expect(Asset.new(name: "name", download_url: "download_url").to_s).to match(
+        /Name: \s+ name\nDownload URL: download_url\n/m)
+    end
+  end
+
   describe "#cpu_type" do
     let(:arm_asset)         { Asset.new(name: "fd-musl_8.1.1_armhf.deb") }
     let(:i386_asset)        { Asset.new(name: "fd_8.1.1_i386.deb") }

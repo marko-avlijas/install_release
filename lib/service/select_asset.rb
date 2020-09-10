@@ -1,5 +1,5 @@
-require 'release'
-require 'asset'
+require_relative '../release'
+require_relative '../asset'
 
 # Chooses asset to install from list of assets in a release
 # based on user's package managers, os and cpu architecture.
@@ -32,7 +32,7 @@ class SelectAsset
   def initialize(cpu:, os:, package_managers:, release:)
     @cpu = cpu
     @os = os
-    @package_managers = package_managers.map(&:to_s)
+    @package_managers = package_managers ? package_managers.map(&:to_s) : []
     @release = release
   end
 
@@ -119,29 +119,31 @@ class SelectAsset
 
   def report
     base = <<~TEXT
-      Detecting system...
+      Found assets:
+        #{release.assets.map(&:name).join("\n  ")}
+
+      Selecting release for:
         Cpu type: #{cpu}
         Operating system: #{os.to_s.capitalize}
         Available package managers: #{package_managers.join(", ")}
-
-      Found assets:
-        #{release.assets.map(&:name).join("\n  ")}
 
       Asset selecting strategy:
         1. choose package manager version for user's cpu
         2. choose package manager version for unknown cpu
         3. choose non package manager version for user's os and cpu
-        4. choose normal version for user's os and :unknown cpu
+        4. choose normal version for user's os and unknown cpu
         5. choose normal version for unknown os and user's cpu, only if it's only one such version
         6. choose normal version with unknown cpu and unknown os, only if it's only one such version
         7. otherwise can't decide
-      explanation = "Strategy reached step #{selection_made_at_step}."
+
+      Strategy reached step #{selection_made_at_step+1}.
+
     TEXT
 
     if success?
       explanation = <<~TEXT
         Selected asset:
-          #{selected_asset.to_s}
+        #{selected_asset.to_s}
 
       TEXT
 

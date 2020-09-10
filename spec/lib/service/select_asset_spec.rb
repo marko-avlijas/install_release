@@ -5,11 +5,11 @@ describe SelectAsset do
 
   describe "#call" do
     # they should be selected in this order
-    let(:package_manager_my_cpu_asset)      { Asset.new(name: "fd-amd64.deb") }
-    let(:package_manager_unknown_cpu_asset) { Asset.new(name: "fd.deb") }
-    let(:my_os_and_cpu_asset)               { Asset.new(name: "fd-unknown-linux-amd64.tar.gz") }
-    let(:my_os_and_uknown_cpu_asset)        { Asset.new(name: "fd-unknown-linux.tar.gz") }
-    let(:unknown_os_and_my_cpu_asset)       { Asset.new(name: "fd-amd64.tar.gz") }
+    let(:package_manager_my_cpu_asset) { Asset.new(name: "fd-amd64.deb", download_url: "") }
+    let(:package_manager_unknown_cpu_asset) { Asset.new(name: "fd.deb", download_url: "") }
+    let(:my_os_and_cpu_asset) { Asset.new(name: "fd-unknown-linux-amd64.tar.gz", download_url: "") }
+    let(:my_os_and_uknown_cpu_asset) { Asset.new(name: "fd-unknown-linux.tar.gz", download_url: "") }
+    let(:unknown_os_and_my_cpu_asset) { Asset.new(name: "fd-amd64.tar.gz", download_url: "") }
 
     let(:all_ok_assets) do
       [package_manager_my_cpu_asset, package_manager_unknown_cpu_asset,
@@ -17,18 +17,18 @@ describe SelectAsset do
     end
 
     # ok if only asset
-    let(:everything_unknown_asset) { Asset.new(name: "fd.zip") }
+    let(:everything_unknown_asset) { Asset.new(name: "fd.zip", download_url: "") }
 
     # these should never be selected even if it's the only release
 
     # TODO: support other package managers
     # let(:other_package_manager_my_cpu_asset) { Asset.new(name: "fd-amd64.rpm") }
     # let(:other_package_manager_unknown_cpu_asset) { Asset.new(name: "fd.rpm") }
-    let(:package_manager_other_cpu_asset) { Asset.new(name: "fd-arm.deb") }
-    let(:my_os_and_other_cpu_asset)       { Asset.new(name: "fd-unknown-linux-arm.tar.gz") }
-    let(:other_os_and_my_cpu_asset)       { Asset.new(name: "fd-darwin-amd64.tar.gz") }
-    let(:other_os_and_unknown_cpu_asset)  { Asset.new(name: "fd-darwin.tar.gz") }
-    let(:other_os_and_other_cpu_asset)    { Asset.new(name: "fd-darwin-arm.tar.gz") }
+    let(:package_manager_other_cpu_asset) { Asset.new(name: "fd-arm.deb", download_url: "") }
+    let(:my_os_and_other_cpu_asset) { Asset.new(name: "fd-unknown-linux-arm.tar.gz", download_url: "") }
+    let(:other_os_and_my_cpu_asset) { Asset.new(name: "fd-darwin-amd64.tar.gz", download_url: "") }
+    let(:other_os_and_unknown_cpu_asset) { Asset.new(name: "fd-darwin.tar.gz", download_url: "") }
+    let(:other_os_and_other_cpu_asset) { Asset.new(name: "fd-darwin-arm.tar.gz", download_url: "") }
 
     let(:all_never_ok_assets) do
       [package_manager_other_cpu_asset, my_os_and_other_cpu_asset,

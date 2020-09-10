@@ -8,7 +8,7 @@ describe Options do
     end
 
     it "recognizes --git REPO and sets tag to :latest_release" do
-      expect(Options.parse ["--git", "sharkdp/fd"] ).to eq(git: 'sharkdp/fd', tag: :latest_release)
+      expect(Options.parse ["--git", "sharkdp/fd"] ).to eq(git: 'sharkdp/fd', tag: :latest)
     end
 
     it "recognizes --tag TAG" do

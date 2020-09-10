@@ -1,5 +1,6 @@
-require 'service/callable'
-require 'system_helper'
+require_relative 'callable'
+require_relative '../system_helper'
+require_relative '../settings'
 
 # Detects system, cpu type & tools avaialable
 #
@@ -27,6 +28,8 @@ class DetectSystem
     detect_cpu_type
     detect_system_download_tool
     detect_package_managers
+
+    self
   end
 
   def supported?

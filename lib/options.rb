@@ -11,7 +11,7 @@ class Options
     # The options specified on the command line will be collected in *options*.
     # We set default values here.
     options = {}
-    options[:tag] = :latest_release
+    options[:tag] = :latest
 
     opt_parser = OptionParser.new do |opts|
       opts.banner=<<~TEXT
@@ -31,7 +31,7 @@ class Options
 
       # mandatory argument
       opts.on("--git REPO",
-              "Get the binary from 'https://github.com/REPO'") do |git|
+              "Get the release from 'https://github.com/REPO'") do |git|
         options[:git] = git
       end
 

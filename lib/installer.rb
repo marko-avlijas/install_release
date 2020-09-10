@@ -1,19 +1,19 @@
+require_relative 'settings'
+
 class Installer
   attr_reader :repo, :tag, :release, :asset
-  attr_reader :os, :cpu_type, :download_tool, :package_managers, :selected_asset
+  attr_reader :system_info, :package_managers, :selected_asset
 
-  def initialize(repo:, tag:)
-    @repo = repo
-    @tag = repo
+  def initialize(options)
+    @repo = options[:git]
+    @tag = options[:tag]
   end
 
   def install
-    @relase = Release.new repo: repo, tag: tag
-
-    # TODO: parse options
-    Settings.instance.set_defaults
-
     detect_system
+
+    @release = Release.new(repo: repo, tag: tag)
+    release.get_info
 
     select_asset
     download_asset
@@ -23,13 +23,18 @@ class Installer
   end
 
   def detect_system
-    system_info = DetectSystem.call
+    puts "\nDetecting system...\n\n"
+    @system_info = DetectSystem.call
     puts system_info.report
     abort "Can't continue" unless system_info.supported?
   end
 
   def select_asset
-    @selected_asset = SelectAsset.call(cpu: cpu_type, os: os, package_managers: package_managers, release: release)
+    @selected_asset = SelectAsset.call(cpu: system_info.cpu_type,
+                                       os: system_info.os,
+                                       package_managers: system_info.package_managers,
+                                       release: release)
+    puts "\n\n"
     puts selected_asset.report
     abort "Can't continue" unless selected_asset.success?
   end
@@ -38,5 +43,6 @@ class Installer
   end
 
   def install_asset
+    0
   end
 end

@@ -1,4 +1,3 @@
-require 'settings'
 require 'installer'
 
 describe Installer do

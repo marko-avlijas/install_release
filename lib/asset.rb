@@ -18,6 +18,13 @@ class Asset
     @download_url ||= raw_data["browser_download_url"]
   end
 
+  def to_s
+    <<~TEXT
+      Name:         #{name}
+      Download URL: #{download_url}
+    TEXT
+  end
+
   def cpu_type
     @cpu_type ||= case name
                       when /arm/
