@@ -26,7 +26,7 @@ describe Release do
     it "raises Release::NotFoundError if repo doesn't exist" do
       release = Release.new(repo: "marko-avlijas/no_such_repo", tag: "latest")
 
-      VCR.use_cassette("marko-avlijas@no_such_repo") do
+      VCR.use_cassette("marko-avlijas_no_such_repo") do
         expect { release.get_info }.to raise_error Release::NotFoundError
       end
     end
@@ -34,7 +34,7 @@ describe Release do
     it "raises Release::NotFoundError if tag doesn't exist" do
       release = Release.new repo: repo, tag: "v123456789.12345.6322" 
 
-      VCR.use_cassette("ripgrep@v123456789.12345.6322") do
+      VCR.use_cassette("ripgrep_v123456789.12345.6322") do
         expect { release.get_info }.to raise_error Release::NotFoundError
       end
     end
@@ -42,7 +42,7 @@ describe Release do
     it "raises Release::RepoHasNoReleasesError if repo doesn't have releases" do
       release = Release.new(repo: "marko-avlijas/dotfiles", tag: "latest")
 
-      VCR.use_cassette("marko-avlijas@dotfiles") do
+      VCR.use_cassette("marko-avlijas_dotfiles") do
         expect { release.get_info }.to raise_error Release::RepoHasNoReleasesError
       end
     end
@@ -50,7 +50,7 @@ describe Release do
     it "downloads assets for specific repo and tag" do
       release = Release.new repo: repo, tag: tag
 
-      VCR.use_cassette("ripgrep@12.1.1") do
+      VCR.use_cassette("ripgrep_12.1.1") do
         release.get_info
       end
 
@@ -80,7 +80,7 @@ describe Release do
     it "follows redirect when tag is 'latest'" do
       release = Release.new repo: repo, tag: "latest"
 
-      VCR.use_cassette("ripgrep@latest") do
+      VCR.use_cassette("ripgrep_latest") do
         release.get_info
       end
 
