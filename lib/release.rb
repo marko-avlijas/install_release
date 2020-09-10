@@ -5,6 +5,7 @@ require_relative "asset"
 # Each asset is specific to certain architecture and os and maybe even distribution.
 class Release
   class NotFoundError < StandardError; end
+  class RepoHasNoReleasesError < StandardError; end
 
   attr_reader :repo, :tag, :assets, :raw_data
 
@@ -15,11 +16,22 @@ class Release
   end
 
   def get_info
+    response = HTTParty.get list_releases_url
+    raise NotFoundError, "Couldn't find #{list_releases_url}" if response.code == 404
+
+    releases = JSON.parse(response.body)
+    raise RepoHasNoReleasesError, "Repo #{repo} has no releases." if releases.empty?
+
+
     response = HTTParty.get github_url
     raise NotFoundError, "Couldn't find #{github_url}" if response.code == 404
 
     @raw_data = JSON.parse(response.body)
     @assets = @raw_data["assets"].map { |asset_json| Asset.new(raw_data: asset_json) }
+  end
+
+  def list_releases_url
+    "https://api.github.com/repos/#{repo}/releases"
   end
 
   def github_url

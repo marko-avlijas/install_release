@@ -1,0 +1,73 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/repos/marko-avlijas/dotfiles/releases
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 10 Sep 2020 17:18:59 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '2'
+      Server:
+      - GitHub.com
+      Status:
+      - 200 OK
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Accept-Encoding, Accept, X-Requested-With, Accept-Encoding
+      Etag:
+      - '"98f0c1b396a4e5d54f4d5fe561d54b44"'
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes,
+        X-Poll-Interval, X-GitHub-Media-Type, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '27'
+      X-Ratelimit-Reset:
+      - '1599760294'
+      X-Ratelimit-Used:
+      - '33'
+      Accept-Ranges:
+      - bytes
+      X-Github-Request-Id:
+      - ECFE:9BA8:20E2E7:28A019:5F5A6003
+    body:
+      encoding: UTF-8
+      string: "[]"
+  recorded_at: Thu, 10 Sep 2020 17:18:59 GMT
+recorded_with: VCR 6.0.0

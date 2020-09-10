@@ -2,6 +2,11 @@ require 'release'
 require 'vcr_helper'
 
 describe Release do
+  it "#list_releases_url" do
+    release = Release.new(repo: "vim/vim")
+    expect(release.list_releases_url).to eq("https://api.github.com/repos/vim/vim/releases")
+  end
+
   describe "#github_url" do
     it "gives correct url for tag 'latest' and :latest" do
       release = Release.new(repo: "sharkdp/fd", tag: 'latest')
@@ -31,6 +36,14 @@ describe Release do
 
       VCR.use_cassette("ripgrep@v123456789.12345.6322") do
         expect { release.get_info }.to raise_error Release::NotFoundError
+      end
+    end
+
+    it "raises Release::RepoHasNoReleasesError if repo doesn't have releases" do
+      release = Release.new(repo: "marko-avlijas/dotfiles", tag: "latest")
+
+      VCR.use_cassette("marko-avlijas@dotfiles") do
+        expect { release.get_info }.to raise_error Release::RepoHasNoReleasesError
       end
     end
 

@@ -12,4 +12,5 @@ Settings.instance.set_defaults
 options = Options.parse(ARGV)
 
 installer = Installer.new(options)
-installer.install
+status_code = installer.install
+exit status_code

@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.github.com/repos/marko-avlijas/no_such_repo/releases/latest
+    uri: https://api.github.com/repos/marko-avlijas/no_such_repo/releases
     body:
       encoding: US-ASCII
       string: ''
@@ -19,7 +19,7 @@ http_interactions:
       message: Not Found
     headers:
       Date:
-      - Fri, 04 Sep 2020 19:57:05 GMT
+      - Thu, 10 Sep 2020 17:14:02 GMT
       Content-Type:
       - application/json; charset=utf-8
       Server:
@@ -51,17 +51,81 @@ http_interactions:
       X-Ratelimit-Limit:
       - '60'
       X-Ratelimit-Remaining:
-      - '40'
+      - '33'
       X-Ratelimit-Reset:
-      - '1599249744'
+      - '1599760295'
       X-Ratelimit-Used:
-      - '20'
+      - '27'
+      Content-Length:
+      - '112'
+      X-Github-Request-Id:
+      - ECE4:9BA6:8BB16:AC4D3:5F5A5EDA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"message":"Not Found","documentation_url":"https://docs.github.com/rest/reference/repos#list-releases"}'
+  recorded_at: Thu, 10 Sep 2020 17:14:02 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/marko-avlijas/no_such_repo/releases/latest
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Thu, 10 Sep 2020 17:14:02 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - GitHub.com
+      Status:
+      - 404 Not Found
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes,
+        X-Poll-Interval, X-GitHub-Media-Type, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Vary:
+      - Accept-Encoding, Accept, X-Requested-With
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '32'
+      X-Ratelimit-Reset:
+      - '1599760295'
+      X-Ratelimit-Used:
+      - '28'
       Content-Length:
       - '116'
       X-Github-Request-Id:
-      - D9FE:2C9D:C00DD74:E90BB04:5F529C11
+      - ECE6:11458:1416DC:183F9A:5F5A5EDA
     body:
       encoding: ASCII-8BIT
       string: '{"message":"Not Found","documentation_url":"https://docs.github.com/rest/reference/repos#get-the-latest-release"}'
-  recorded_at: Fri, 04 Sep 2020 19:57:05 GMT
+  recorded_at: Thu, 10 Sep 2020 17:14:02 GMT
 recorded_with: VCR 6.0.0

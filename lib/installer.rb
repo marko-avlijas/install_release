@@ -18,8 +18,17 @@ class Installer
     select_asset
     download_asset
 
-    status_code = install_asset
-    exit status_code
+    install_asset
+
+  rescue Release::NotFoundError => e
+    puts
+    puts e.message
+    puts "Hint: maybe you mispelled the repository name?"
+    10
+  rescue Release::RepoHasNoReleasesError => e
+    puts
+    puts e.message
+    11
   end
 
   def detect_system
