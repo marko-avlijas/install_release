@@ -4,7 +4,8 @@ require_relative "asset"
 # Represents a version of application. It contains one or more assets.
 # Each asset is specific to certain architecture and os and maybe even distribution.
 class Release
-  class NotFoundError < StandardError; end
+  class RepoNotFoundError < StandardError; end
+  class TagNotFoundError < StandardError; end
   class RepoHasNoReleasesError < StandardError; end
 
   attr_reader :repo, :tag, :assets, :raw_data
@@ -16,17 +17,20 @@ class Release
   end
 
   def get_info
-    response = HTTParty.get list_releases_url
-    raise NotFoundError, "Couldn't find #{list_releases_url}" if response.code == 404
+    response = HTTParty.get(list_releases_url, headers: {"User-Agent" => "install_release"}) 
+    raise RepoNotFoundError, "Couldn't find #{list_releases_url}" if response.code == 404
 
     releases = JSON.parse(response.body)
     raise RepoHasNoReleasesError, "Repo #{repo} has no releases." if releases.empty?
 
+    @raw_data = if tag.to_s == "latest"
+                  releases.first
+                else
+                  releases.select { |release| release["tag_name"] == tag }.first
+                end
 
-    response = HTTParty.get github_url
-    raise NotFoundError, "Couldn't find #{github_url}" if response.code == 404
+    raise TagNotFoundError, "Release with tag #{tag.inspect} does not exist" if @raw_data.nil?
 
-    @raw_data = JSON.parse(response.body)
     @assets = @raw_data["assets"].map { |asset_json| Asset.new(raw_data: asset_json) }
   end
 

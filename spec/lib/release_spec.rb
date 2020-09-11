@@ -23,19 +23,19 @@ describe Release do
     let(:repo) { "BurntSushi/ripgrep" }
     let(:tag) {  "12.1.1" }
 
-    it "raises Release::NotFoundError if repo doesn't exist" do
+    it "raises Release::RepoNotFoundError if repo doesn't exist" do
       release = Release.new(repo: "marko-avlijas/no_such_repo", tag: "latest")
 
       VCR.use_cassette("marko-avlijas_no_such_repo") do
-        expect { release.get_info }.to raise_error Release::NotFoundError
+        expect { release.get_info }.to raise_error Release::RepoNotFoundError
       end
     end
 
-    it "raises Release::NotFoundError if tag doesn't exist" do
+    it "raises Release::TagNotFoundError if tag doesn't exist" do
       release = Release.new repo: repo, tag: "v123456789.12345.6322" 
 
       VCR.use_cassette("ripgrep_v123456789.12345.6322") do
-        expect { release.get_info }.to raise_error Release::NotFoundError
+        expect { release.get_info }.to raise_error Release::TagNotFoundError
       end
     end
 
@@ -86,6 +86,7 @@ describe Release do
 
       # I don't know what latest release will be in figure so just verify something that likely won't change
       expect(release.raw_data["url"]).to start_with("https://api.github.com/repos/BurntSushi/ripgrep/releases/")
+      expect(release.raw_data["tag_name"]).to be >= "12.1.1"
     end
   end
 
