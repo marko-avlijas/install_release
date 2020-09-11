@@ -20,10 +20,14 @@ class Installer
 
     install_asset
 
-  rescue Release::NotFoundError => e
+  rescue Release::RepoNotFoundError => e
     puts
     puts e.message
     puts "Hint: maybe you mispelled the repository name?"
+    10
+  rescue Release::TagNotFoundError => e
+    puts
+    puts e.message
     10
   rescue Release::RepoHasNoReleasesError => e
     puts
