@@ -18,7 +18,7 @@ class Release
 
   def get_info
     response = HTTParty.get(list_releases_url, headers: {"User-Agent" => "install_release"}) 
-    raise RepoNotFoundError, "Couldn't find #{list_releases_url}" if response.code == 404
+    raise RepoNotFoundError, "Couldn't find #{list_releases_url}" if response.code.between?(400, 499)
 
     releases = JSON.parse(response.body)
     raise RepoHasNoReleasesError, "Repo #{repo} has no releases." if releases.empty?
