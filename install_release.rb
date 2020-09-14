@@ -7,6 +7,7 @@ require_relative "lib/system_helper"
 
 require_relative "lib/service/detect_system"
 require_relative "lib/service/select_asset"
+require_relative "lib/service/download_asset"
 
 Settings.instance.set_defaults
 options = Options.parse(ARGV)

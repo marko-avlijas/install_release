@@ -53,6 +53,13 @@ class Installer
   end
 
   def download_asset
+    download_dir = Settings.instance.download_dir
+    status = DownloadAsset.call(asset: selected_asset.selected_asset,
+                                download_dir: download_dir,
+                                download_tool: system_info.download_tool)
+    unless status.success?
+      abort status.error_message
+    end
   end
 
   def install_asset
